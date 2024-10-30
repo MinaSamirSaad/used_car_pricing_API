@@ -1,3 +1,4 @@
+import { AuthService } from './auth.service';
 import {
     Body,
     Controller,
@@ -8,8 +9,8 @@ import {
     Patch,
     Post,
     Query,
-    UseInterceptors,
-    ClassSerializerInterceptor,
+    Session,
+    UseGuards,
 } from '@nestjs/common';
 import { CreateUserDto } from './dtos/create-user.dto';
 import { UsersService } from './users.service';
@@ -18,13 +19,27 @@ import { Serialize } from 'src/interceptors/serialize.interceptor';
 import { UserDto } from './dtos/user.dto';
 
 @Controller('auth')
+@Serialize(UserDto)
 export class UsersController {
-    constructor(private userService: UsersService) { }
+    constructor(private userService: UsersService, private authService: AuthService) { }
+
     @Post('/signup')
-    createUser(@Body() body: CreateUserDto) {
-        return this.userService.create(body.email, body.password);
+    async createUser(@Body() body: CreateUserDto, @Session() session: any) {
+        const user = await this.authService.signUp(body.email, body.password);
+        session.userId = user.id;
+        return user;
     }
-    @Serialize(UserDto)
+
+    @Post('/signin')
+    async signIn(@Body() body: CreateUserDto, @Session() session: any) {
+        const user = await this.authService.signIn(body.email, body.password);
+        session.userId = user.id;
+        return user;
+    }
+    @Post('/signout')
+    signOut(@Session() session: any) {
+        session.userId = null;
+    }
     @Get()
     getUsers(@Query('email') email: string) {
         if (email) {
@@ -34,13 +49,11 @@ export class UsersController {
         }
     }
 
-    @Serialize(UserDto)
     @Get('/:id')
     getUser(@Param('id', new ParseIntPipe()) id: number) {
         return this.userService.findOne(id);
     }
 
-    @Serialize(UserDto)
     @Patch('/:id')
     updateUser(
         @Param('id', new ParseIntPipe()) id: number,
@@ -54,13 +67,4 @@ export class UsersController {
         return this.userService.remove(id);
     }
 
-    //   @Post('/signin')
-    //   signIn() {
-    //     return this.userService.signIn();
-    //   }
-
-    //   @Post('/signout')
-    //   signOut() {
-    //     return this.userService.signOut();
-    //   }
 }
