@@ -1,5 +1,5 @@
 import { AfterInsert, AfterRemove, AfterUpdate, Column, Entity, PrimaryGeneratedColumn, Unique } from 'typeorm';
-
+import { Exclude } from 'class-transformer';
 @Entity()
 @Unique(['email'])
 export class User {
@@ -10,6 +10,7 @@ export class User {
     email: string;
 
     @Column()
+    @Exclude()
     password: string;
 
     @AfterInsert()
