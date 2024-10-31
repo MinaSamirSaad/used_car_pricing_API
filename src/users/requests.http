@@ -16,6 +16,13 @@
 #   "password": "secret"
 # }
 
+GET http://localhost:3000/auth/whoami
+Content-Type: application/json
+
+# get user by id
+# POST  http://localhost:3000/auth/signout
+# Content-Type: application/json
+
 
 # get user by email
 # GET http://localhost:3000/auth?email=test@example.com
@@ -25,8 +32,8 @@
 # Content-Type: application/json
 
 # get user by id
-GET http://localhost:3000/auth/4
-Content-Type: application/json
+# GET http://localhost:3000/auth/4
+# Content-Type: application/json
 
 # Delete a user
 # DELETE http://localhost:3000/auth/2

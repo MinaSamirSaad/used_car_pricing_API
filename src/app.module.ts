@@ -23,7 +23,6 @@ import { ConfigModule } from '@nestjs/config';
     ReportsModule,
   ],
   controllers: [AppController],
-  providers: [AppService,
-  ],
+  providers: [AppService],
 })
 export class AppModule { }
