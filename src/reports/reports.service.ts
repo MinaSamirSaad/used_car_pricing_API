@@ -1,10 +1,11 @@
-import { Injectable, UnauthorizedException } from '@nestjs/common';
+import { Injectable, NotFoundException, UnauthorizedException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Report } from './report.entity';
 import { CreateReportDto } from './dtos/create-report.dto';
 import { User } from 'src/users/user.entity';
 import { ApproveReportDto } from './dtos/approve-report.dto';
+import { GetEstimateDto } from './dtos/get-estimate.dto';
 
 @Injectable()
 export class ReportsService {
@@ -46,13 +47,28 @@ export class ReportsService {
     async approveReport(id: number, data: ApproveReportDto, user: User) {
         const report = await this.reportRepository.findOne({ where: { id: id } });
         if (!report) {
-            throw new Error('report not found');
+            throw new NotFoundException('report not found');
         }
-        if (report.user.id === user.id) {
-            throw new UnauthorizedException('Unauthorized access');
-        }
+
         report.approved = data.approved;
         return await this.reportRepository.save(report);
+    }
+
+    async createEstimate(query: GetEstimateDto) {
+        return this.reportRepository.createQueryBuilder()
+            .select('AVG(price)', 'price')
+            .where('make = :make', { make: query.make })
+            .andWhere('model = :model', { model: query.model })
+            .andWhere('year = :year', { year: query.year })
+            .andWhere('mileage <= :mileage', { mileage: query.mileage })
+            .andWhere('lng - :lng BETWEEN -5 AND 5', { lng: query.lng })
+            .andWhere('lat - :lat BETWEEN -5 AND 5', { lat: query.lat })
+            .andWhere('year - :year BETWEEN -3 AND 3', { year: query.year })
+            .andWhere('approved IS TRUE')
+            .orderBy('ABS(mileage - :mileage)', 'DESC')
+            .setParameters({ mileage: query.mileage })
+            .limit(3)
+            .getRawOne();
     }
 
 }

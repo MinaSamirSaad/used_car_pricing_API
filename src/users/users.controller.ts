@@ -32,7 +32,7 @@ export class UsersController {
         return user
     }
 
-    @Serialize(UserDto)
+
     @Post('/signup')
     @Serialize(UserDto)
     async createUser(@Body() body: CreateUserDto, @Session() session: any) {

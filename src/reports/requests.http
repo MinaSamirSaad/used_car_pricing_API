@@ -10,3 +10,28 @@ Content-Type: application/json
   "lng": -118.2437,
   "lat": 34.0522
 }
+
+################################################################################
+
+GET http://localhost:3000/reports?make=toyota&model=Camry&lng=-118.2437&lat=34.0522&mileage=50000&year=2020
+Content-Type: application/json
+
+################################################################################
+
+
+GET  http://localhost:3000/reports
+Content-Type: application/json
+
+################################################################################
+
+GET  http://localhost:3000/reports/4
+Content-Type: application/json
+
+################################################################################
+
+PATCH    http://localhost:3000/reports/2/approve
+Content-Type: application/json
+
+{
+  "approved": true
+}

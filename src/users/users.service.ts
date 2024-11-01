@@ -15,7 +15,7 @@ export class UsersService {
         user.password = password;
         return await this.usersRepository.save(user);
     }
-    async findOne(id: number): Promise<User | object> {
+    async findOne(id: number): Promise<User> {
         const user = await this.usersRepository.findOne({ where: { id: id } });
         if (!user) {
             throw new NotFoundException('User not found');
