@@ -1,4 +1,5 @@
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import { User } from 'src/users/user.entity';
+import { Column, Entity, PrimaryGeneratedColumn, ManyToOne, AfterInsert, AfterUpdate } from 'typeorm';
 
 @Entity()
 export class Report {
@@ -25,5 +26,21 @@ export class Report {
 
     @Column()
     lat: number;
+
+    @Column({ default: false })
+    approved: boolean;
+
+    @ManyToOne(() => User, user => user.reports, { onDelete: 'CASCADE', eager: true })
+    user: User;
+
+    @AfterInsert()
+    logInsert() {
+        console.log('Inserted Report with id', this.id);
+    }
+
+    @AfterUpdate()
+    logUpdate() {
+        console.log('Updated Report with id', this.id);
+    }
 
 }

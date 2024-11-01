@@ -19,18 +19,22 @@ import { Serialize } from 'src/interceptors/serialize.interceptor';
 import { UserDto } from './dtos/user.dto';
 import { CurrentUser } from './decorators/current-user.decorator';
 import { AuthGuard } from 'src/guards/auth.guard';
+import { CreateReportDto } from 'src/reports/dtos/create-report.dto';
+import { UserReportsDto } from './dtos/user-Reports.dto';
 
 @Controller('auth')
-@Serialize(UserDto)
 export class UsersController {
     constructor(private userService: UsersService, private authService: AuthService) { }
     @UseGuards(AuthGuard)
     @Get('/whoami')
+    @Serialize(UserDto)
     async whoami(@CurrentUser() user: UserDto) {
         return user
     }
 
+    @Serialize(UserDto)
     @Post('/signup')
+    @Serialize(UserDto)
     async createUser(@Body() body: CreateUserDto, @Session() session: any) {
         const user = await this.authService.signUp(body.email, body.password);
         session.userId = user.id;
@@ -38,6 +42,7 @@ export class UsersController {
     }
 
     @Post('/signin')
+    @Serialize(UserDto)
     async signIn(@Body() body: CreateUserDto, @Session() session: any) {
         const user = await this.authService.signIn(body.email, body.password);
         session.userId = user.id;
@@ -48,6 +53,7 @@ export class UsersController {
         session.userId = null;
     }
     @Get()
+    @Serialize(UserDto)
     getUsers(@Query('email') email: string) {
         if (email) {
             return this.userService.findByEmail(email);
@@ -57,11 +63,19 @@ export class UsersController {
     }
 
     @Get('/:id')
+    @Serialize(UserDto)
     getUser(@Param('id', new ParseIntPipe()) id: number) {
         return this.userService.findOne(id);
     }
 
+    @Get('/:id/reports')
+    @Serialize(UserReportsDto)
+    getUserReports(@Param('id', new ParseIntPipe()) id: number) {
+        return this.userService.getUserReports(id);
+    }
+
     @Patch('/:id')
+    @Serialize(UserDto)
     updateUser(
         @Param('id', new ParseIntPipe()) id: number,
         @Body() body: UpdateUserDto,
@@ -70,6 +84,7 @@ export class UsersController {
     }
 
     @Delete('/:id')
+    @Serialize(UserDto)
     removeUser(@Param('id', new ParseIntPipe()) id: number) {
         return this.userService.remove(id);
     }

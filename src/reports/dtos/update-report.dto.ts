@@ -41,4 +41,5 @@ export class UpdateReportDto {
     @IsLatitude()
     @IsOptional()
     lat: number;
+
 }
