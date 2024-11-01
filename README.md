@@ -33,7 +33,7 @@ This is a NestJS project that includes user authentication, authorization, and r
 
 1. Clone the repository:
     ```bash
-    git clone https://github.com/your-repo/nestjs-project.git
+    git clone https://github.com/MinaSamirSaad/used_car_pricing_API
     cd nestjs-project
     ```
 
