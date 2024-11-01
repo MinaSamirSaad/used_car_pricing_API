@@ -1,4 +1,4 @@
-import { MiddlewareConsumer, Module, Scope } from '@nestjs/common';
+import { MiddlewareConsumer, Module, RequestMethod, Scope } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { UsersController } from './users.controller';
 import { UsersService } from './users.service';
@@ -14,7 +14,11 @@ import { CurrentUserMiddleware } from './middlewares/current-user.middleware';
 })
 export class UsersModule {
   configure(consumer: MiddlewareConsumer) {
-    consumer.apply(CurrentUserMiddleware).forRoutes('*');
+    consumer.apply(CurrentUserMiddleware).exclude(
+      { path: 'auth/signup', method: RequestMethod.POST },
+      { path: 'auth/signin', method: RequestMethod.POST },
+      { path: 'auth/signout', method: RequestMethod.POST }
+    ).forRoutes('*');
 
   }
 }

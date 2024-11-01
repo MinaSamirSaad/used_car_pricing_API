@@ -1,3 +1,4 @@
+import { Transform } from 'class-transformer';
 import {
     IsNumber,
     IsString,
@@ -5,6 +6,7 @@ import {
     IsLongitude,
     Max,
     Min,
+    IsLowercase,
 } from 'class-validator';
 export class CreateReportDto {
     @IsNumber()
@@ -13,9 +15,11 @@ export class CreateReportDto {
     price: number;
 
     @IsString()
+    @Transform(({ value }) => value.toLowerCase())
     make: string;
 
     @IsString()
+    @Transform(({ value }) => value.toLowerCase())
     model: string;
 
     @IsNumber()

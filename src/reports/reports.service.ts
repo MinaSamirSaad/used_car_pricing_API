@@ -6,6 +6,8 @@ import { CreateReportDto } from './dtos/create-report.dto';
 import { User } from 'src/users/user.entity';
 import { ApproveReportDto } from './dtos/approve-report.dto';
 import { GetEstimateDto } from './dtos/get-estimate.dto';
+import { ReportDto } from './dtos/report.dto';
+import { plainToClass } from 'class-transformer';
 
 @Injectable()
 export class ReportsService {
@@ -19,8 +21,11 @@ export class ReportsService {
         report.user = user;
         return await this.reportRepository.save(report);
     }
-    async findAll(): Promise<Report[]> {
-        return await this.reportRepository.find();
+    async findAll(): Promise<ReportDto[]> {
+        const reports = await this.reportRepository.find();
+        return reports.map(report => {
+            return plainToClass(ReportDto, report, { excludeExtraneousValues: true })
+        });
     }
     async findById(id: number): Promise<Report | undefined> {
         return await this.reportRepository.findOne({ where: { id: id } });
@@ -36,12 +41,15 @@ export class ReportsService {
         Object.assign(report, updatedReport);
         return await this.reportRepository.save(report);
     }
-    async deleteReport(id: number): Promise<Report> {
+    async deleteReport(id: number, user: User): Promise<Report> {
         const report = await this.reportRepository.findOne({ where: { id: id } });
         if (!report) {
             throw new Error('report not found');
         }
-        return await this.reportRepository.remove(report);
+        if (report.user.id === user.id || user.isAdmin) {
+            return await this.reportRepository.remove(report);
+        }
+        throw new UnauthorizedException('Unauthorized access');
     }
 
     async approveReport(id: number, data: ApproveReportDto, user: User) {
@@ -55,9 +63,9 @@ export class ReportsService {
     }
 
     async createEstimate(query: GetEstimateDto) {
-        return this.reportRepository.createQueryBuilder()
+        return await this.reportRepository.createQueryBuilder()
             .select('AVG(price)', 'price')
-            .where('make = :make', { make: query.make })
+            .andWhere('make = :make', { make: query.make })
             .andWhere('model = :model', { model: query.model })
             .andWhere('year = :year', { year: query.year })
             .andWhere('mileage <= :mileage', { mileage: query.mileage })

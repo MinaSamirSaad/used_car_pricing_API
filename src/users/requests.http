@@ -26,7 +26,7 @@ Content-Type: application/json
 ################################################################################
 
 
-# get user by id
+# signout
 POST  http://localhost:3000/auth/signout
 Content-Type: application/json
 
@@ -63,7 +63,7 @@ Content-Type: application/json
 ################################################################################
 
 # Update a user
-PATCH  http://localhost:3000/auth/3
+PATCH  http://localhost:3000/auth/1
 Content-Type: application/json
 
 {

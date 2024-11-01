@@ -1,8 +1,9 @@
 import { Expose, Transform } from "class-transformer";
+import { IsOptional } from "class-validator";
 
 import { User } from "src/users/user.entity";
-
 export class ReportDto {
+    @IsOptional()
     @Expose()
     id: number;
     @Expose()

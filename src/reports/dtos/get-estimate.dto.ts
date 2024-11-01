@@ -6,15 +6,18 @@ import {
     Max,
     Min,
     IsOptional,
+    IsLowercase,
 } from 'class-validator';
 import { Transform } from 'class-transformer';
 export class GetEstimateDto {
     @IsString()
+    @Transform(({ value }) => value.toLowerCase())
     @IsOptional()
     make: string;
 
     @IsString()
     @IsOptional()
+    @Transform(({ value }) => value.toLowerCase())
     model: string;
 
     @Transform(({ value }) => +value)
@@ -31,12 +34,12 @@ export class GetEstimateDto {
     @IsOptional()
     mileage: number;
 
-    @Transform(({ value }) => +value)
+    @Transform(({ value }) => parseFloat(value))
     @IsLongitude()
     @IsOptional()
     lng: number;
 
-    @Transform(({ value }) => +value)
+    @Transform(({ value }) => parseFloat(value))
     @IsLatitude()
     @IsOptional()
     lat: number;
