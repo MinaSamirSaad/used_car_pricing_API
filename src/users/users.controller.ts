@@ -21,6 +21,7 @@ import { CurrentUser } from './decorators/current-user.decorator';
 import { AuthGuard } from 'src/guards/auth.guard';
 import { CreateReportDto } from 'src/reports/dtos/create-report.dto';
 import { UserReportsDto } from './dtos/user-Reports.dto';
+import { ApiBody, ApiResponse } from '@nestjs/swagger';
 
 @Controller('auth')
 export class UsersController {
@@ -35,6 +36,8 @@ export class UsersController {
 
     @Post('/signup')
     @Serialize(UserDto)
+    @ApiResponse({ status: 201, description: 'The user has been successfully created.' })
+    @ApiResponse({ status: 400, description: 'Email already in use' })
     async createUser(@Body() body: CreateUserDto, @Session() session: any) {
         const user = await this.authService.signUp(body.email, body.password);
         session.userId = user.id;

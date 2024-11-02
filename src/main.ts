@@ -1,6 +1,7 @@
 import { NestFactory } from '@nestjs/core';
 import { ValidationPipe } from '@nestjs/common';
 import { AppModule } from './app.module';
+import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 const cookieSession = require('cookie-session');
 
 async function bootstrap() {
@@ -11,6 +12,15 @@ async function bootstrap() {
     res.removeHeader('date');
     next();
   });
+  const options = new DocumentBuilder()
+    .setTitle('Used Car Pricing API')
+    .setVersion('1.0')
+    .addServer('http://localhost:3000/', 'Local environment')
+    .addServer('https://production.yourapi.com/', 'Production')
+    .build();
+
+  const document = SwaggerModule.createDocument(app, options);
+  SwaggerModule.setup('api-docs', app, document);
   await app.listen(3000);
 }
 bootstrap();
