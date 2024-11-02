@@ -59,7 +59,7 @@ export class UsersController {
         return user
     }
 
-    @ApiOperation({ summary: 'get all users or specific user by email' })
+    @ApiOperation({ summary: 'get all users' })
     @ApiResponse({
         status: 200,
         description: 'Successfully retrieved users',
@@ -74,27 +74,10 @@ export class UsersController {
             },
         },
     })
-    @ApiResponse({
-        status: 404,
-        description: 'user not found',
-        examples: {
-            notFound: {
-                value: {
-                    message: 'User not found',
-                    error: "Not Found",
-                },
-                summary: 'there is no user with this email',
-            },
-        },
-    })
     @Get()
     @Serialize(UserDto)
-    getUsers(@Query('email') email: string) {
-        if (email) {
-            return this.userService.findByEmail(email);
-        } else {
-            return this.userService.findAll();
-        }
+    getUsers() {
+        return this.userService.findAll();
     }
 
     // ----------------------------------------------------------------
