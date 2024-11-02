@@ -90,12 +90,28 @@ export class ReportsController {
         },
     })
     @Get()
-    findAll(@Query() query: GetEstimateDto) {
-        if (Object.keys(query).length > 0) {
-            return this.reportsService.createEstimate(query);
-        }
-
+    findAll() {
         return this.reportsService.findAll();
+    }
+
+    // -----------------------------------------------------
+    @ApiOperation({ summary: 'create estimate' })
+    @ApiResponse({
+        status: 200,
+        description: 'Successfully created estimate',
+        type: ReportDto,
+        examples: {
+            success: {
+                value: {
+                    "price": 25000
+                },
+                summary: 'Successfully created estimate',
+            },
+        },
+    })
+    @Get('estimate')
+    createEstimate(@Query() query: GetEstimateDto) {
+        return this.reportsService.createEstimate(query);
     }
 
     // -----------------------------------------------------

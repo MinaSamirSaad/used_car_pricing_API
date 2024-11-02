@@ -15,8 +15,8 @@ async function bootstrap() {
   const options = new DocumentBuilder()
     .setTitle('Used Car Pricing API')
     .setVersion('1.0')
+    .addServer('https://usedcarpricingapi-production.up.railway.app/', 'Production')
     .addServer('http://localhost:3000/', 'Local environment')
-    .addServer('https://production.yourapi.com/', 'Production')
     .build();
 
   const document = SwaggerModule.createDocument(app, options);

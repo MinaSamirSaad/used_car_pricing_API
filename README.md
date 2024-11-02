@@ -19,7 +19,7 @@
 
 # My NestJS Project
 
-This is a NestJS project that includes user authentication, authorization, and reporting features. The project is built with TypeScript, TypeORM, and SQLite, and includes testing with Jest and Supertest.
+This is a NestJS project that includes user authentication, authorization, and reporting features. The project is built with TypeScript, TypeORM, and SQLite, and includes testing with Jest and documentation with Swagger.
 
 
 ## Getting Started
@@ -34,7 +34,7 @@ This is a NestJS project that includes user authentication, authorization, and r
 1. Clone the repository:
     ```bash
     git clone https://github.com/MinaSamirSaad/used_car_pricing_API
-    cd nestjs-project
+    cd used_car_pricing_API
     ```
 
 2. Install dependencies:
@@ -73,3 +73,56 @@ $ npm run test:e2e
 # test coverage
 $ npm run test:cov
 ```
+
+## Endpoints
+
+### Users
+
+* **GET /users**
+  * Retrieves a list of all users.
+* **GET /users/{id}**
+  * Retrieves a specific user by ID.
+* **PATCH /users/{id}**
+  * Updates a specific user by ID.
+* **DELETE /users/{id}**
+  * Deletes a specific user by ID.
+
+### Reports
+
+* **GET /reports**
+  * Retrieves a list of reports, optionally filtered by make, model, year, mileage, and location.
+* **POST /reports**
+  * Creates a new report.
+* **GET /reports/{id}**
+  * Retrieves a specific report by ID.
+* **PATCH /reports/{id}**
+  * Updates a specific report by ID.
+* **DELETE /reports/{id}**
+  * Deletes a specific report by ID.
+* **PATCH /reports/{id}/approve**
+  * Approves a specific report by ID.
+
+### Authentication
+
+* **POST /auth/signup**
+  * Creates a new user account.
+* **POST /auth/signin**
+  * Signs in a user.
+* **POST /auth/signout**
+  * Signs out a user.
+
+## Data Models
+
+* **UserDto:** Represents a user.
+* **UserReportsDto:** Represents a list of user reports.
+* **UpdateUserDto:** Represents a user update request.
+* **CreateReportDto:** Represents a report creation request.
+* **ReportDto:** Represents a report.
+* **UpdateReportDto:** Represents a report update request.
+* **ApproveReportDto:** Represents a report approval request.
+* **CreateUserDto:** Represents a user creation request.
+
+
+## API Documentation
+
+For full API documentation, please refer to the [Swagger Documentation](https://usedcarpricingapi-production.up.railway.app/api-docs).
