@@ -1,8 +1,9 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { Injectable, NotFoundException, UnauthorizedException } from '@nestjs/common';
 import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import { User } from './user.entity';
 import { Report } from 'src/reports/report.entity';
+import { UserDto } from './dtos/user.dto';
 @Injectable()
 export class UsersService {
     constructor(
@@ -20,21 +21,29 @@ export class UsersService {
         if (!user) {
             throw new NotFoundException('User not found');
         }
+        user.reports
         return user;
     }
 
-    async findByEmail(email: string): Promise<User | undefined> {
-        return await this.usersRepository.findOne({ where: { email: email } });
+    async findByEmail(email: string): Promise<User> {
+        const user = await this.usersRepository.findOne({ where: { email: email } });
+        if (!user) {
+            throw new NotFoundException('User not found');
+        }
+        return user
     }
 
     async findAll(): Promise<User[]> {
         return await this.usersRepository.find();
     }
 
-    async update(id: number, newUser: Partial<User>): Promise<User> {
+    async update(id: number, newUser: Partial<User>, currentUser: UserDto): Promise<User> {
         const user = await this.usersRepository.findOne({ where: { id: id } });
         if (!user) {
             throw new NotFoundException('User not found');
+        }
+        if (currentUser.id !== user.id) {
+            throw new UnauthorizedException('User not found');
         }
         Object.assign(user, newUser);
         return await this.usersRepository.save(user);

@@ -17,6 +17,7 @@ export class ReportsService {
     ) { }
 
     async createReport(newReport: CreateReportDto, user: User) {
+        console.log('user', user);
         const report = this.reportRepository.create(newReport);
         report.user = user;
         return await this.reportRepository.save(report);
@@ -27,13 +28,17 @@ export class ReportsService {
             return plainToClass(ReportDto, report, { excludeExtraneousValues: true })
         });
     }
-    async findById(id: number): Promise<Report | undefined> {
-        return await this.reportRepository.findOne({ where: { id: id } });
+    async findById(id: number): Promise<Report> {
+        const report = await this.reportRepository.findOne({ where: { id: id } });
+        if (!report) {
+            throw new NotFoundException('report not found');
+        }
+        return report;
     }
     async updateReport(id: number, updatedReport: Partial<Report>, user: User): Promise<Report> {
         const report = await this.reportRepository.findOne({ where: { id: id } });
         if (!report) {
-            throw new Error('report not found');
+            throw new NotFoundException('report not found');
         }
         if (report.user.id !== user.id) {
             throw new UnauthorizedException('Unauthorized access');
@@ -44,7 +49,7 @@ export class ReportsService {
     async deleteReport(id: number, user: User): Promise<Report> {
         const report = await this.reportRepository.findOne({ where: { id: id } });
         if (!report) {
-            throw new Error('report not found');
+            throw new NotFoundException('report not found');
         }
         if (report.user.id === user.id || user.isAdmin) {
             return await this.reportRepository.remove(report);

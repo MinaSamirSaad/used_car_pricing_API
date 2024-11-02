@@ -1,8 +1,12 @@
-import { ExecutionContext, CanActivate } from '@nestjs/common';
+import { ExecutionContext, CanActivate, UnauthorizedException } from '@nestjs/common';
 
 export class AuthGuard implements CanActivate {
     canActivate(context: ExecutionContext) {
         const request = context.switchToHttp().getRequest();
-        return request.session.userId;
+
+        if (request.currentUser) {
+            return true;
+        }
+        throw new UnauthorizedException('Unauthorized access');
     }
 }

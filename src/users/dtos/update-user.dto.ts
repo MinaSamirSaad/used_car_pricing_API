@@ -5,7 +5,7 @@ export class UpdateUserDto {
     @IsEmail()
     @IsOptional()
     @ApiProperty({
-        example: 'test@test.com',
+        example: 'test123@test.com',
         required: false
     })
     email: string;
@@ -13,7 +13,7 @@ export class UpdateUserDto {
     @IsString()
     @IsOptional()
     @ApiProperty({
-        example: 'test@test.com',
+        example: 'secret',
         required: false
     })
     password: string;
