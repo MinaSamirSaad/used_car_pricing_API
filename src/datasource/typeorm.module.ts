@@ -5,12 +5,11 @@ let database: string;
 
 switch (process.env.NODE_ENV) {
     case 'development':
+    case 'production':
         database = 'db.sqlite'
         break;
     case 'test':
         database = 'test.sqlite'
-        break;
-    case 'production':
         break;
     default:
         throw new Error('unknown environment');
@@ -27,7 +26,7 @@ switch (process.env.NODE_ENV) {
                 // using the factory function to create the datasource instance
                 try {
                     const dataSource = new DataSource({
-                        type: process.env.NODE_ENV === 'production' ? 'postgres' : 'sqlite',
+                        type: 'sqlite',
                         database: database,
                         synchronize: true,
                         entities: [`${__dirname}/../**/**.entity{.ts,.js}`], // this will automatically load all entity file in the src folder
