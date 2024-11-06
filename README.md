@@ -90,7 +90,9 @@ $ npm run test:cov
 ### Reports
 
 * **GET /reports**
-  * Retrieves a list of reports, optionally filtered by make, model, year, mileage, and location.
+  * Retrieves a list of reports
+* **GET /reports/estimate**
+  * give you a price estimate based on the query you send and the reports in the system.
 * **POST /reports**
   * Creates a new report.
 * **GET /reports/{id}**
