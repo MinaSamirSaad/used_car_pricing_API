@@ -68,10 +68,10 @@ describe('ReportsService', () => {
 
   describe('findById', () => {
     it('should return a specific report by ID', async () => {
-      const mockReport = { id: 1, price: 25000, make: 'Toyota' } as Report;
+      const mockReport = { make: 'Toyota', model: 'Camry', year: 2020, mileage: 50000, lng: -118.2437, lat: 34.0522, id: 1, price: 25000, user: {} } as Report;
       (reportRepository.findOne as jest.Mock).mockResolvedValue(mockReport);
-
-      const result = await service.findById(1);
+      const user = { id: 2, isAdmin: false } as User;
+      const result = await service.findById(1, user);
 
       expect(reportRepository.findOne).toHaveBeenCalledWith({ where: { id: 1 } });
       expect(result).toEqual(mockReport);

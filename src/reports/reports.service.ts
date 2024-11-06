@@ -22,7 +22,7 @@ export class ReportsService {
         report.user = user;
         return await this.reportRepository.save(report);
     }
-    async findAll(user: User): Promise<ReportUserDto[] | ReportDto[]> {
+    async findAll(user?: User): Promise<ReportUserDto[] | ReportDto[]> {
         const reports = await this.reportRepository.find();
         if (user && user?.isAdmin) {
             return reports.map(report => {
@@ -33,12 +33,15 @@ export class ReportsService {
             return plainToClass(ReportUserDto, report, { excludeExtraneousValues: true })
         });
     }
-    async findById(id: number): Promise<Report> {
+    async findById(id: number, user?: User): Promise<Report | ReportUserDto> {
         const report = await this.reportRepository.findOne({ where: { id: id } });
         if (!report) {
             throw new NotFoundException('report not found');
         }
-        return report;
+        if (user && (user?.isAdmin || report.user?.id == user.id)) {
+            return plainToClass(ReportDto, report, { excludeExtraneousValues: true });
+        }
+        return plainToClass(ReportUserDto, report, { excludeExtraneousValues: true });
     }
     async updateReport(id: number, updatedReport: Partial<Report>, user: User): Promise<Report> {
         const report = await this.reportRepository.findOne({ where: { id: id } });

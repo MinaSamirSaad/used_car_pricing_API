@@ -13,7 +13,7 @@ Content-Type: application/json
 
 ################################################################################
 
-GET http://localhost:3000/reports?make=Toyota&model=Camry&lng=-118.2437&lat=34.0522&mileage=50000&year=2020
+GET http://localhost:3000/reports/estimate?make=Toyota&model=Camry&lng=-118.2437&lat=34.0522&mileage=50000&year=2020
 Content-Type: application/json
 
 ################################################################################
@@ -24,7 +24,7 @@ Content-Type: application/json
 
 ################################################################################
 
-GET  http://localhost:3000/reports/10
+GET  http://localhost:3000/reports/2
 Content-Type: application/json
 
 ################################################################################
@@ -38,7 +38,7 @@ Content-Type: application/json
 
 ################################################################################
 
-PATCH    http://localhost:3000/reports/5/approve
+PATCH    http://localhost:3000/reports/1/approve
 Content-Type: application/json
 
 {

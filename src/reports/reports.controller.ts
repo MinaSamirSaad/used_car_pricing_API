@@ -154,9 +154,8 @@ export class ReportsController {
         },
     })
     @Get('/:id')
-    @Serialize(ReportDto)
-    findById(@Param('id') id: number) {
-        return this.reportsService.findById(id);
+    findById(@Param('id') id: number, @CurrentUser() user?: User) {
+        return this.reportsService.findById(id, user);
     }
 
     // -----------------------------------------------------

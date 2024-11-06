@@ -80,7 +80,7 @@ describe('ReportsController', () => {
       (service.findById as jest.Mock).mockResolvedValue(result);
 
       expect(await controller.findById(reportId)).toEqual(result);
-      expect(service.findById).toHaveBeenCalledWith(reportId);
+      expect(service.findById).toHaveBeenCalledWith(reportId, undefined);
     });
 
   });
