@@ -17,7 +17,7 @@
 <a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
 </p>
 
-# My NestJS Project
+# Used Car Pricing API
 
 This is a NestJS project that includes user authentication, authorization, and reporting features. The project is built with TypeScript, TypeORM, and SQLite, and includes testing with Jest and documentation with Swagger.
 
