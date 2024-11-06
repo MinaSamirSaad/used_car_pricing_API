@@ -64,7 +64,7 @@ describe('AuthService', () => {
     it('throws if signin is called with an unused email', async () => {
         await expect(
             service.signIn('asdflkj@asdlfkj.com', 'passdflkj'),
-        ).rejects.toThrow(NotFoundException);
+        ).rejects.toThrow(BadRequestException);
     });
 
     it('throws if an invalid password is provided', async () => {

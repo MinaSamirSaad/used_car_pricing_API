@@ -2,7 +2,7 @@ import { Injectable, NotFoundException, UnauthorizedException } from '@nestjs/co
 import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import { User } from './user.entity';
-import { Report } from 'src/reports/report.entity';
+import { Report } from '../reports/report.entity';
 import { UserDto } from './dtos/user.dto';
 @Injectable()
 export class UsersService {

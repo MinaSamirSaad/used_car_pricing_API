@@ -16,7 +16,7 @@ export class ReportDto {
     lng: number;
     @Expose()
     lat: number;
-    @Transform(({ obj }) => ({ id: obj.user.id, email: obj.user.email }))
+    @Transform(({ obj }) => ({ id: obj.user?.id, email: obj.user?.email }))
     @Expose()
     user: { id: number, email: string };
     @Expose()
