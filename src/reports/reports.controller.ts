@@ -6,7 +6,7 @@ import { UpdateReportDto } from './dtos/update-report.dto';
 import { CurrentUser } from '../users/decorators/current-user.decorator';
 import { User } from '../users/user.entity';
 import { Serialize } from '../interceptors/serialize.interceptor';
-import { ReportDto } from './dtos/report.dto';
+import { ReportDto } from './dtos/report-admin.dto';
 import { ApproveReportDto } from './dtos/approve-report.dto';
 import { AdminGuard } from '../guards/admin.guard';
 import { GetEstimateDto } from './dtos/get-estimate.dto';
@@ -90,8 +90,8 @@ export class ReportsController {
         },
     })
     @Get()
-    findAll() {
-        return this.reportsService.findAll();
+    findAll(@CurrentUser() user?: User) {
+        return this.reportsService.findAll(user);
     }
 
     // -----------------------------------------------------

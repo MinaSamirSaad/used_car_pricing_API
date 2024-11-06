@@ -58,8 +58,8 @@ describe('ReportsService', () => {
     it('should return all reports', async () => {
       const mockReports = [{ "approved": undefined, "id": 1, "lat": undefined, "lng": undefined, "make": "Toyota", "mileage": undefined, "model": undefined, "price": 25000, "user": { "email": undefined, "id": undefined }, "year": undefined }] as Report[];
       (reportRepository.find as jest.Mock).mockResolvedValue(mockReports);
-
-      const result = await service.findAll();
+      const user = { id: 2, isAdmin: false } as User;
+      const result = await service.findAll(user);
 
       expect(reportRepository.find).toHaveBeenCalled();
       expect(result).toEqual(expect.arrayContaining(mockReports));

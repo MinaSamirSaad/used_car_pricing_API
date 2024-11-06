@@ -2,11 +2,12 @@ import { Injectable, NotFoundException, UnauthorizedException } from '@nestjs/co
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Report } from './report.entity';
+import { ReportUserDto } from './dtos/report-user.dto';
 import { CreateReportDto } from './dtos/create-report.dto';
 import { User } from '../users/user.entity';
 import { ApproveReportDto } from './dtos/approve-report.dto';
 import { GetEstimateDto } from './dtos/get-estimate.dto';
-import { ReportDto } from './dtos/report.dto';
+import { ReportDto } from './dtos/report-admin.dto';
 import { plainToClass } from 'class-transformer';
 
 @Injectable()
@@ -17,15 +18,19 @@ export class ReportsService {
     ) { }
 
     async createReport(newReport: CreateReportDto, user: User) {
-        console.log('user', user);
         const report = this.reportRepository.create(newReport);
         report.user = user;
         return await this.reportRepository.save(report);
     }
-    async findAll(): Promise<ReportDto[]> {
+    async findAll(user: User): Promise<ReportUserDto[] | ReportDto[]> {
         const reports = await this.reportRepository.find();
+        if (user && user?.isAdmin) {
+            return reports.map(report => {
+                return plainToClass(ReportDto, report, { excludeExtraneousValues: true })
+            });
+        }
         return reports.map(report => {
-            return plainToClass(ReportDto, report, { excludeExtraneousValues: true })
+            return plainToClass(ReportUserDto, report, { excludeExtraneousValues: true })
         });
     }
     async findById(id: number): Promise<Report> {

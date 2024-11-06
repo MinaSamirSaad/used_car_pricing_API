@@ -7,9 +7,7 @@ import { ReportsModule } from './reports/reports.module';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { APP_PIPE } from '@nestjs/core';
 const cookieSession = require('cookie-session');
-// import { dbConfig } from 'ormconfig';
 import { AuthModule } from './auth/auth.module';
-// console.log(dbConfig);
 
 @Module({
   imports: [
