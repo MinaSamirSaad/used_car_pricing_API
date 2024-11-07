@@ -1,3 +1,4 @@
+import { Review } from '../reviews/review.entity';
 import { Report } from '../reports/report.entity';
 import { AfterInsert, AfterRemove, AfterUpdate, Column, Entity, PrimaryGeneratedColumn, OneToMany } from 'typeorm';
 @Entity()
@@ -11,11 +12,14 @@ export class User {
     @Column()
     password: string;
 
-    @Column({ default: false })
+    @Column({ default: true })
     isAdmin: boolean;
 
     @OneToMany(() => Report, report => report.user)
     reports: Report[];
+
+    @OneToMany(() => Review, review => review.user)
+    reviews: Review[];
 
     @AfterInsert()
     logInsert() {

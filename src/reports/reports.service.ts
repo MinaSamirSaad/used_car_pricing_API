@@ -9,6 +9,7 @@ import { ApproveReportDto } from './dtos/approve-report.dto';
 import { GetEstimateDto } from './dtos/get-estimate.dto';
 import { ReportDto } from './dtos/report-admin.dto';
 import { plainToClass } from 'class-transformer';
+import { ReviewsService } from '@src/reviews/reviews.service';
 
 @Injectable()
 export class ReportsService {
@@ -29,7 +30,9 @@ export class ReportsService {
                 return plainToClass(ReportDto, report, { excludeExtraneousValues: true })
             });
         }
-        return reports.map(report => {
+        return reports.filter(report => {
+            return report.approved;
+        }).map(report => {
             return plainToClass(ReportUserDto, report, { excludeExtraneousValues: true })
         });
     }
@@ -40,6 +43,9 @@ export class ReportsService {
         }
         if (user && (user?.isAdmin || report.user?.id == user.id)) {
             return plainToClass(ReportDto, report, { excludeExtraneousValues: true });
+        }
+        if (!report.approved) {
+            throw new NotFoundException('report not found');
         }
         return plainToClass(ReportUserDto, report, { excludeExtraneousValues: true });
     }
@@ -69,6 +75,9 @@ export class ReportsService {
         const report = await this.reportRepository.findOne({ where: { id: id } });
         if (!report) {
             throw new NotFoundException('report not found');
+        }
+        if (!user.isAdmin) {
+            throw new UnauthorizedException('Unauthorized access');
         }
 
         report.approved = data.approved;

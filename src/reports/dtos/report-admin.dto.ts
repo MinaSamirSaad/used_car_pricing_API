@@ -21,4 +21,7 @@ export class ReportDto {
     user: { id: number, email: string };
     @Expose()
     approved: boolean;
+    @Expose()
+    @Transform(({ obj }) => obj.reviews?.map(review => ({ id: review.id, content: review.content, rating: review.rating })))
+    reviews: { id: number, content: string, rating: number }[];
 }

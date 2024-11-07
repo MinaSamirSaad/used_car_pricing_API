@@ -103,6 +103,12 @@ $ npm run test:cov
   * Deletes a specific report by ID.
 * **PATCH /reports/{id}/approve**
   * Approves a specific report by ID.
+* **GET /reports/{id}/reviews**
+  * get all reviews for specific report.
+* **POST /reports/{id}/reviews**
+  * create new review for specific report.
+* **DELETE /reports/{id}/reviews/{id}**
+  * delete specific review for specific report.
 
 ### Authentication
 
@@ -123,6 +129,8 @@ $ npm run test:cov
 * **UpdateReportDto:** Represents a report update request.
 * **ApproveReportDto:** Represents a report approval request.
 * **CreateUserDto:** Represents a user creation request.
+* **CreateReviewDto:** Represents a review creation request.
+* **ReviewDto:** Represents a review.
 
 
 ## API Documentation

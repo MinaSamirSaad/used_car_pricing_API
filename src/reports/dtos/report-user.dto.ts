@@ -19,4 +19,7 @@ export class ReportUserDto {
     @Transform(({ obj }) => ({ id: obj.user?.id, email: obj.user?.email }))
     @Expose()
     user: { id: number, email: string };
+    @Expose()
+    @Transform(({ obj }) => obj.reviews?.map(review => ({ id: review.id, content: review.content, rating: review.rating })))
+    reviews: { id: number, content: string, rating: number }[];
 }

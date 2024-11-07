@@ -1,5 +1,6 @@
+import { Review } from '../reviews/review.entity';
 import { User } from '../users/user.entity';
-import { Column, Entity, PrimaryGeneratedColumn, ManyToOne, AfterInsert, AfterUpdate } from 'typeorm';
+import { Column, Entity, PrimaryGeneratedColumn, ManyToOne, AfterInsert, AfterUpdate, OneToMany } from 'typeorm';
 
 @Entity()
 export class Report {
@@ -32,6 +33,9 @@ export class Report {
 
     @ManyToOne(() => User, user => user.reports, { onDelete: 'CASCADE', eager: true })
     user: User;
+
+    @OneToMany(() => Review, review => review.report, { eager: true })
+    reviews: Review[];
 
     @AfterInsert()
     logInsert() {

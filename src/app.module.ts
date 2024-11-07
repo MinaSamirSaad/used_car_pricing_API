@@ -8,6 +8,7 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import { APP_PIPE } from '@nestjs/core';
 const cookieSession = require('cookie-session');
 import { AuthModule } from './auth/auth.module';
+import { ReviewsModule } from './reviews/reviews.module';
 
 @Module({
   imports: [
@@ -19,6 +20,7 @@ import { AuthModule } from './auth/auth.module';
     UsersModule,
     ReportsModule,
     AuthModule,
+    ReviewsModule,
   ],
   controllers: [AppController],
   providers: [

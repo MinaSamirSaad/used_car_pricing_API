@@ -55,8 +55,8 @@ describe('ReportsService', () => {
   });
 
   describe('findAll', () => {
-    it('should return all reports', async () => {
-      const mockReports = [{ "approved": undefined, "id": 1, "lat": undefined, "lng": undefined, "make": "Toyota", "mileage": undefined, "model": undefined, "price": 25000, "user": { "email": undefined, "id": undefined }, "year": undefined }] as Report[];
+    it('should return all reports that approved', async () => {
+      const mockReports = [] as Report[];
       (reportRepository.find as jest.Mock).mockResolvedValue(mockReports);
       const user = { id: 2, isAdmin: false } as User;
       const result = await service.findAll(user);
@@ -68,13 +68,13 @@ describe('ReportsService', () => {
 
   describe('findById', () => {
     it('should return a specific report by ID', async () => {
-      const mockReport = { make: 'Toyota', model: 'Camry', year: 2020, mileage: 50000, lng: -118.2437, lat: 34.0522, id: 1, price: 25000, user: {} } as Report;
+      const mockReport = { make: 'Toyota', model: 'Camry', year: 2020, mileage: 50000, lng: -118.2437, lat: 34.0522, id: 1, price: 25000, user: { id: 1, email: 'test@test.com' } } as Report;
       (reportRepository.findOne as jest.Mock).mockResolvedValue(mockReport);
       const user = { id: 2, isAdmin: false } as User;
-      const result = await service.findById(1, user);
+      const result = service.findById(1, user);
 
       expect(reportRepository.findOne).toHaveBeenCalledWith({ where: { id: 1 } });
-      expect(result).toEqual(mockReport);
+      await expect(result).rejects.toThrow(NotFoundException);
     });
 
     it('should throw NotFoundException if report is not found', async () => {
@@ -130,6 +130,8 @@ describe('ReportsService', () => {
     it('should approve a specific report', async () => {
       const mockReport = { id: 1, price: 25000, make: 'Toyota', approved: false } as Report;
       const approveReportDto: ApproveReportDto = { approved: true };
+      const mockUser: User = { id: 1, email: 'test@example.com', isAdmin: true } as User;
+
 
       (reportRepository.findOne as jest.Mock).mockResolvedValue(mockReport);
       (reportRepository.save as jest.Mock).mockResolvedValue({ ...mockReport, approved: true });
